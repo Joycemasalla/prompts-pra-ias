@@ -1,21 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Search, Sparkles, Copy, Eye, HelpCircle, X, Check } from "lucide-react";
-import promptsData from "@/data/prompts.json";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { Search, Sparkles, Copy, Eye, HelpCircle, X, Check, Lock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type Prompt = {
+  id: string;
   title: string;
   image: string;
   category: string;
   prompt: string;
 };
-
-const PROMPTS = promptsData as Prompt[];
-
-const CATEGORIES = [
-  "Todos",
-  ...Array.from(new Set(PROMPTS.map((p) => p.category))),
-];
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -32,15 +26,33 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const [prompts, setPrompts] = useState<Prompt[]>([]);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Todos");
   const [open, setOpen] = useState<Prompt | null>(null);
   const [howTo, setHowTo] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
+  useEffect(() => {
+    supabase
+      .from("prompts")
+      .select("id,title,image,category,prompt")
+      .order("position", { ascending: true })
+      .then(({ data }) => {
+        setPrompts((data ?? []) as Prompt[]);
+        setLoading(false);
+      });
+  }, []);
+
+  const categories = useMemo(
+    () => ["Todos", ...Array.from(new Set(prompts.map((p) => p.category)))],
+    [prompts],
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return PROMPTS.filter((p) => {
+    return prompts.filter((p) => {
       const inCat = category === "Todos" || p.category === category;
       if (!inCat) return false;
       if (!q) return true;
@@ -50,7 +62,7 @@ function HomePage() {
         p.category.toLowerCase().includes(q)
       );
     });
-  }, [query, category]);
+  }, [query, category, prompts]);
 
   const handleCopy = async (text: string, key: string) => {
     try {
@@ -83,13 +95,22 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setHowTo(true)}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm text-foreground/90 backdrop-blur transition hover:border-primary/40 hover:text-primary"
-          >
-            <HelpCircle className="h-4 w-4" />
-            Como usar
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setHowTo(true)}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm text-foreground/90 backdrop-blur transition hover:border-primary/40 hover:text-primary"
+            >
+              <HelpCircle className="h-4 w-4" />
+              Como usar
+            </button>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm text-foreground/90 backdrop-blur transition hover:border-primary/40 hover:text-primary"
+            >
+              <Lock className="h-4 w-4" />
+              Admin
+            </Link>
+          </div>
         </header>
 
         {/* Search */}
@@ -107,7 +128,7 @@ function HomePage() {
 
           {/* Categories */}
           <div className="mt-5 flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => {
+            {categories.map((c) => {
               const active = c === category;
               return (
                 <button
@@ -127,14 +148,14 @@ function HomePage() {
           </div>
 
           <p className="mt-6 text-sm text-muted-foreground">
-            {filtered.length} prompts encontrados
+            {loading ? "Carregando..." : `${filtered.length} prompts encontrados`}
           </p>
         </div>
 
         {/* Grid */}
         <section className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((p, i) => {
-            const key = `${p.title}-${i}`;
+          {filtered.map((p) => {
+            const key = p.id;
             return (
               <article
                 key={key}
@@ -189,7 +210,7 @@ function HomePage() {
           })}
         </section>
 
-        {filtered.length === 0 && (
+        {!loading && filtered.length === 0 && (
           <div className="mt-16 text-center text-muted-foreground">
             Nenhum prompt encontrado.
           </div>
