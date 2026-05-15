@@ -215,7 +215,16 @@ function PromptForm({
         if (error) throw error;
       } else {
         const { error } = await supabase.from("prompts")
-          .insert({ title, category, prompt, image: imageUrl, position: Date.now() });
+const { data: last } = await supabase
+  .from("prompts")
+  .select("position")
+  .order("position", { ascending: false })
+  .limit(1)
+  .single();
+const nextPos = (last?.position ?? 0) + 1;
+
+const { error } = await supabase.from("prompts")
+  .insert({ title, category, prompt, image: imageUrl, position: nextPos });
         if (error) throw error;
       }
       onSaved();
