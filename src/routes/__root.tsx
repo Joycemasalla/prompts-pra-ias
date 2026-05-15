@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Prompts-Prontos" },
+      { name: "description", content: "Create and manage AI-generated images from text prompts." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Prompts-Prontos" },
+      { property: "og:description", content: "Create and manage AI-generated images from text prompts." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Prompts-Prontos" },
+      { name: "twitter:description", content: "Create and manage AI-generated images from text prompts." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3f341062-6b6b-4e64-bba5-2678412d6145/id-preview-db0026eb--23be6fda-6bef-44ac-b4f4-2d6808b7dc68.lovable.app-1778846472196.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3f341062-6b6b-4e64-bba5-2678412d6145/id-preview-db0026eb--23be6fda-6bef-44ac-b4f4-2d6808b7dc68.lovable.app-1778846472196.png" },
     ],
     links: [
       {
