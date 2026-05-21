@@ -1,0 +1,1 @@
+ALTER TABLE public.prompts ALTER COLUMN position TYPE BIGINT;
