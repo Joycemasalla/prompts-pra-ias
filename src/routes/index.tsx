@@ -76,42 +76,46 @@ function HomePage() {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-14">
         {/* Header */}
         <header className="flex flex-wrap items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             <div
-              className="grid h-12 w-12 place-items-center rounded-xl border border-primary/30 bg-primary/10"
-              style={{ boxShadow: "var(--shadow-glow)" }}
+              className="grid h-14 w-14 place-items-center rounded-2xl border border-primary/30"
+              style={{
+                background: "var(--gradient-primary)",
+                boxShadow: "var(--shadow-glow)",
+              }}
             >
-              <Sparkles className="h-6 w-6 text-primary" />
+              <Sparkles className="h-7 w-7 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                 Prompts de Imagem
               </h1>
-              <p className="mt-1 text-sm text-muted-foreground sm:text-base">
-                Explore prompts criativos para geração de imagens
+              <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
+                Biblioteca curada de prompts profissionais para geração de imagens e marketing com IA.
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setHowTo(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm text-foreground/90 backdrop-blur transition hover:border-primary/40 hover:text-primary"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm font-medium text-foreground/90 backdrop-blur transition hover:border-primary/40 hover:text-primary"
             >
               <HelpCircle className="h-4 w-4" />
               Como usar
             </button>
             <Link
               to="/admin"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm text-foreground/90 backdrop-blur transition hover:border-primary/40 hover:text-primary"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm font-medium text-foreground/90 backdrop-blur transition hover:border-primary/40 hover:text-primary"
             >
               <Lock className="h-4 w-4" />
               Admin
             </Link>
           </div>
         </header>
+
 
         {/* Search */}
         <div className="mt-10">
